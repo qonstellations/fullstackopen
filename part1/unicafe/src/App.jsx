@@ -9,17 +9,22 @@ const Statistics = ({ good, neutral, bad }) => {
   const avg = (all !== 0) ? (good-bad)/all : 0
   const positive = (all !== 0) ? good/all : 0;
 
-  return (
-    <div>
-      <p>good {good} <br />
-      neutral {neutral} <br />
-      bad {bad} <br />
-      all {all} <br />
-      average {avg} <br />
-      positive {positive*100}%
-      </p>
-    </div>
-  )
+  if(all !== 0){
+    return (
+      <div>
+        <p>good {good} <br />
+        neutral {neutral} <br />
+        bad {bad} <br />
+        all {all} <br />
+        average {avg} <br />
+        positive {positive*100}%
+        </p>
+      </div>
+    )
+  }
+  else{
+    return <p>No feedback given</p>
+  }
 }
 
 const App = () => {
