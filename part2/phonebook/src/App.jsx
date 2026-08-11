@@ -1,5 +1,9 @@
 import { useState } from 'react'
 
+import Filter from './components/Filter'
+import PersonForm from './components/PersonForm'
+import Persons from './components/Persons'
+
 const App = () => {
   const [persons, setPersons] = useState([
     { name: 'Arto Hellas', number: '040-123456', id: 1 },
@@ -16,12 +20,17 @@ const App = () => {
     const isFound = persons.some(
       person => person.name.trim().toLowerCase() === newPerson.name.toLowerCase()
     )
+
     if(isFound){
       window.alert(`${newPerson.name} is already added to phonebook`)
     }
     else{
-      newPerson.id = persons.length+1
-      setPersons([...persons, newPerson])
+      const personObject = {
+        name: newPerson.name,
+        number: newPerson.number,
+        id: persons.length+1
+      }
+      setPersons([...persons, personObject])
     }
 
     setNewPerson({ name: '', number: '', id: undefined })
@@ -43,30 +52,20 @@ const App = () => {
     <div>
       <h2>Phonebook</h2>
 
-      <div>
-        filter shown with <input type="text" value={searchQuery} onChange={handleSearchQuery} />
-      </div>
+      <Filter searchQuery={searchQuery} handleSearchQuery={handleSearchQuery} />
 
-      <h2>add a new</h2>
-      <form onSubmit={addPerson}>
-        <div>
-          name: <input type='text' value={newPerson.name} onChange={handleNameChange} />
-        </div>
-        <div>
-          number: <input type='text' value={newPerson.number} onChange={handleNumberChange} />
-        </div>
-        <div>
-          <button type="submit">add</button>
-        </div>
-      </form>
+      <h3>add a new</h3>
 
-      <h2>Numbers</h2>
-      {persons.filter(
-          person => person.name.toLowerCase().includes(searchQuery.toLowerCase())
-        ).map(
-            person => <div key={person.id}>{person.name} {person.number}</div>
-          )
-      }
+      <PersonForm 
+        newPerson={newPerson} 
+        addPerson={addPerson} 
+        handleNameChange={handleNameChange} 
+        handleNumberChange={handleNumberChange} 
+      />
+
+      <h3>Numbers</h3>
+      
+      <Persons persons={persons} searchQuery={searchQuery} />
     </div>
   )
 }
