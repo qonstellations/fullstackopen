@@ -1,20 +1,22 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 
+import personService from './services/persons'
+
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
 
 const App = () => {
   const [persons, setPersons] = useState([])
-  const [newPerson, setNewPerson] = useState({ name:'', number:'', id:undefined })
+  const [newPerson, setNewPerson] = useState({ name:'', number:'', id:'' })
   const [searchQuery, setSearchQuery] = useState('')
 
   useEffect(() => {
-    axios
-      .get('http://localhost:3001/persons')
-      .then(response => {
-        setPersons(response.data)
+    personService
+      .getAll()
+      .then(allPersons => {
+        setPersons(allPersons)
       })
   }, [])
 
@@ -31,11 +33,14 @@ const App = () => {
       const personObject = {
         name: newPerson.name,
         number: newPerson.number,
-        id: persons.length+1
       }
-      setPersons([...persons, personObject])
+      personService
+        .create(personObject)
+        .then(newPersonObject => {
+          setPersons([...persons, newPersonObject])
+        })
     }
-    setNewPerson({ name: '', number: '', id: undefined })
+    setNewPerson({ name: '', number: '', id: '' })
   }
 
   const handleNameChange = event => setNewPerson({...newPerson, name: event.target.value })
