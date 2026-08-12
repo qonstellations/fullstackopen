@@ -43,6 +43,17 @@ const App = () => {
     setNewPerson({ name: '', number: '', id: '' })
   }
 
+  const deletePerson = (id) => {
+    const conf = confirm("are you sure you want to delete this contact?")
+    if(conf === true){
+      personService
+        .remove(persons.find(person => person.id === id).id)
+        .then(response => {
+          setPersons(persons.filter(person => person.id !== id))
+        })
+    }
+  }
+
   const handleNameChange = event => setNewPerson({...newPerson, name: event.target.value })
   const handleNumberChange = event => setNewPerson({...newPerson, number: event.target.value })
   const handleSearchQuery = event => setSearchQuery(event.target.value)
@@ -64,7 +75,7 @@ const App = () => {
 
       <h3>Numbers</h3>
       
-      <Persons persons={persons} searchQuery={searchQuery} />
+      <Persons persons={persons} searchQuery={searchQuery} onDeleteClicked={(id) => deletePerson(id)} />
     </div>
   )
 }
