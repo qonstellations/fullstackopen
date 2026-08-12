@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
 
 import personService from './services/persons'
 
@@ -22,12 +21,10 @@ const App = () => {
 
   const addPerson = (event) => {
     event.preventDefault()
-    const isFound = persons.some(
-      person => person.name.trim().toLowerCase() === newPerson.name.toLowerCase()
-    )
-
+    const isFound = persons.find(person => person.name.trim().toLowerCase() === newPerson.name.toLowerCase())
+    
     if(isFound){
-      window.alert(`${newPerson.name} is already added to phonebook`)
+      updatePerson(isFound.id)
     }
     else{
       const personObject = {
@@ -50,6 +47,24 @@ const App = () => {
         .remove(persons.find(person => person.id === id).id)
         .then(response => {
           setPersons(persons.filter(person => person.id !== id))
+        })
+    }
+  }
+
+  const updatePerson = (id) => {
+    const conf = confirm(`Do you want to update contact details?`)
+    if(conf){
+      const currentPerson = persons.find(person => person.id === id)
+      const changedPerson = {
+        ...newPerson,
+        number: newPerson.number
+      }
+
+      personService
+        .modify(id, changedPerson)
+        .then(updatedPersonObject => {
+          setPersons(persons.map(person => (person.id === id) ? updatedPersonObject : person))
+          setNewPerson({ name: '', number: '', id: '' })
         })
     }
   }
