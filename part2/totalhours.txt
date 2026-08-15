@@ -2,4 +2,4 @@
 2.b = 2.5 Hours
 2.c = 2 Hours
 2.d = 3.5 Hours
-2.e = 
+2.e = 2.5 Hours + started at 6 pm

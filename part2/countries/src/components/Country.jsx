@@ -1,0 +1,28 @@
+import Weather from "./Weather"
+
+const Country = ({ country }) => {
+  const flagStyle = {
+    border: '2px solid black'
+  }
+
+  return (
+    <div>
+      <h1>{country.name.common}</h1>
+      <p>
+        Capital - {country.capital?.[0]} <br />
+        Area - {country.area}
+      </p>
+
+      <h2>Languages</h2>
+      <ul>
+        {Object.values(country.languages).map((language, index) => <li key={index}>{language}</li>)}
+      </ul>
+
+      <img src={country.flags.svg} width='200' style={flagStyle} alt={country.flags.alt} />
+
+      <Weather country={country} />
+    </div>
+  )
+}
+
+export default Country
